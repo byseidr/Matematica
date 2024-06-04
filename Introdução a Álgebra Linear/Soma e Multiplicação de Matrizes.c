@@ -26,12 +26,12 @@ int somar;
 int subtrair;
 int multiplicar;
 
-printf("Insira o nÃºmero de linhas 'i' e o nÃºmero de colunas 'j' da matriz A:\n");
-printf("NÃºmero de linhas i=");
+printf("Insira o número de linhas 'i' e o número de colunas 'j' da matriz A:\n");
+printf("Número de linhas i=");
 scanf("%d", &i);
 fflush(stdin);
 
-printf("\nNÃºmero de colunas j=");
+printf("\nNúmero de colunas j=");
 scanf("%d", &j);
 fflush(stdin);
 
@@ -62,12 +62,12 @@ fflush(stdin);
 
 printf("\n----------------------------------------------------\n");
 
-printf("Agora, insira o nÃºmero de linhas 'm' e o nÃºmero de colunas 'n' da matriz B:\n");
-printf("NÃºmero de linhas m=");
+printf("Agora, insira o número de linhas 'm' e o número de colunas 'n' da matriz B:\n");
+printf("Número de linhas m=");
 scanf("%d", &o);
 fflush(stdin);
 
-printf("\nNÃºmero de colunas n=");
+printf("\nNúmero de colunas n=");
 scanf("%d", &p);
 fflush(stdin);
 
@@ -94,9 +94,9 @@ fflush(stdin);
         }
         printf("\n");
     }
-
+do{
 printf("\n------------------------------------------------------------------\n");
-printf("VocÃª quer somar, subtrair ou multiplicar?\n");
+printf("Você quer somar, subtrair ou multiplicar?\n");
 scanf("%s", &digite);
 fflush(stdin);
 
@@ -111,7 +111,7 @@ int mat3[k][l];
 
 
 if(somar==0){
-    printf("\nEntÃ£o vocÃª quer somar.\n");
+    printf("\nEntão você quer somar.\n");
 
 
 for(x=0; x<i; x++){
@@ -122,7 +122,7 @@ for(x=0; x<i; x++){
         }
     }
     printf("\n---------------------------------------------\n");
-    printf("\nEsta Ã© a soma dessas duas matrizes:\n\n\n");
+    printf("\nEsta é a soma dessas duas matrizes:\n\n\n");
 
     printf("A + B = \n");
     for(x=0; x<i; x++){
@@ -134,7 +134,7 @@ for(x=0; x<i; x++){
 
 }
 if(subtrair==0){
-    printf("\nEntÃ£o vocÃª quer subtrair.\n");
+    printf("\nEntão você quer subtrair.\n");
 
     for(x=0; x<i; x++){
         for(y=0; y<j; y++){
@@ -144,7 +144,7 @@ if(subtrair==0){
         }
     }
     printf("\n---------------------------------------------\n");
-    printf("\nEsta Ã© a subtraÃ§Ã£o dessas duas matrizes:\n\n\n");
+    printf("\nEsta é a subtração dessas duas matrizes:\n\n\n");
 
     printf("A - B = \n");
     for(x=0; x<i; x++){
@@ -158,7 +158,7 @@ if(subtrair==0){
 if(multiplicar==0){
     if(j==o){
     printf("\n---------------------------------------------\n");
-    printf("\nEsta Ã© a multiplicaÃ§Ã£o dessas duas matrizes:\n\n\n");
+    printf("\nEsta é a multiplicação dessas duas matrizes:\n\n\n");
 
     int v, w, y, z, al;
     int matmult[i][p];
@@ -180,9 +180,11 @@ if(multiplicar==0){
     }
 
     }else{
-    printf("O nÃºmero de colunas da matriz A nÃ£o Ã© igual ao nÃºmero de linhas da matriz B. Logo, Ã© impossÃ­vel efetuar a multiplicaÃ§Ã£o.\n");
+    printf("O número de colunas da matriz A não é igual ao número de linhas da matriz B. Logo, é imposs­ível efetuar a multiplicação.\n");
 }
 }
+}while(i>0 && j>0);
+
 
 
 return 0;}
