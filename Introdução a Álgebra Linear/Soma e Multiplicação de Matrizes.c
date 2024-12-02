@@ -4,187 +4,236 @@
 #include <math.h>
 #include <string.h>
 
-#define N 20
+struct Dim {
+    int i;
+    int j;
+};
 
+struct Dim obter_dimensoes() {
+    struct Dim dim;
 
+    printf("Insira o n√∫mero de linhas 'i' e o n√∫mero de colunas 'j':\n");
+    printf("\nN√∫mero de linhas i=");
+    scanf("%d", &dim.i);
 
+    printf("\nN√∫mero de colunas j=");
+    scanf("%d", &dim.j);
+
+    return dim;
+}
+
+void imprimir_matriz(int** mat, int i, int j) {
+    printf("\n");
+
+    for (int m = 0; m < i; m++)
+    {
+        printf("|  ");
+
+        for (int n = 0; n < j; n++)
+        {
+            printf("%02d", mat[m][n]);
+            if (n < j - 1) printf("    ");
+        }
+
+        printf("  |\n");
+
+        if (m < i - 1)
+        {
+            printf("|  ");
+            for (int n = 0; n < 3 * j - 2; n++)
+            {
+                printf("  ");
+            }
+            printf("  |\n");
+        }
+    }
+
+    printf("\n");
+}
+
+int** criar_matriz(char* nome, int i, int j) {
+    nome = nome == NULL ? "matriz" : nome;
+    
+    printf("\nAgora, preencha a %s.\n", nome);
+
+    int **mat = (int**)malloc(i * sizeof(int*));
+
+    for (int m = 0; m < i; m++) {
+        mat[m] = (int*)malloc(j * sizeof(int));
+
+        for (int n = 0; n < j; n++) {
+            printf("Digite o valor do elemento ij=%d%d: \n", m, n);
+            scanf("%d", &mat[m][n]);
+        }
+    }
+
+    printf("Imprimindo a %s:\n", nome);
+    imprimir_matriz(mat, i, j);
+
+    return mat;
+}
+
+void liberar_matriz(int** mat, int i) {
+    for (int m = 0; m < i; m++) {
+        free(mat[m]);
+    }
+    free(mat);
+}
+
+void somar_ou_subtrair_matrizez(int** mat1, int** mat2, int i, int j, char* op) {
+    int **mat3 = (int**)malloc(i * sizeof(int*));
+    int multi = op == "soma" ? 1 : -1;
+    char *sinal = op == "soma" ? "+" : "-";
+
+    printf("\nEnt√£o voc√™ quer realizar uma %s.\n", op);
+
+    for(int x=0; x<i; x++){
+        mat3[x] = (int*)malloc(j * sizeof(int));
+
+        for(int y=0; y<j; y++){
+            mat3[x][y] = mat1[x][y] + (multi * mat2[x][y]);
+        }
+    }
+
+    printf("\n---------------------------------------------\n");
+    printf("\nEsta √© a %s dessas duas matrizes:\n\n\n", op);
+
+    imprimir_matriz(mat1, i, j);
+
+    printf("%s\n", sinal);
+
+    imprimir_matriz(mat2, i, j);
+
+    printf("=\n");
+
+    imprimir_matriz(mat3, i, j);
+
+    liberar_matriz(mat3, i);
+}
+
+void somar_matrizez(int** mat1, int** mat2, int i, int j) {
+    somar_ou_subtrair_matrizez(mat1, mat2, i, j, "soma");
+}
+
+void subtrair_matrizez(int** mat1, int** mat2, int i, int j) {
+    somar_ou_subtrair_matrizez(mat1, mat2, i, j, "subtra√ß√£o");
+}
+
+int produto_escalar(int* vet1, int* vet2, int n) {
+    int resultado = 0;
+    for (int i = 0; i < n; i++) {
+        resultado += vet1[i] * vet2[i];
+    }
+    return resultado;
+}
+
+int** transpor_matriz(int** mat, int i, int j) {
+    int **mat_t = (int**)malloc(j * sizeof(int*));
+    for (int n = 0; n < j; n++)
+    {
+        mat_t[n] = (int*)malloc(i * sizeof(int));
+    }
+
+    for (int m = 0; m < i; m++)
+    {
+        for (int n = 0; n < j; n++)
+        {
+            mat_t[n][m] = mat[m][n];
+        }
+    }
+
+    return mat_t;
+}
+
+void multiplicar_matrizez(int** mat1, int** mat2, int i, int j, int n) {
+    int **mat2_t = transpor_matriz(mat2, n, j);
+    int **mat3 = (int**)malloc(i * sizeof(int*));
+
+    printf("\nEnt√£o voc√™ quer realizar uma multiplica√ß√£o.\n");
+
+    for(int x=0; x<i; x++){
+        mat3[x] = (int*)malloc(j * sizeof(int));
+
+        for(int y=0; y<j; y++){
+            mat3[x][y] = produto_escalar(mat1[x], mat2_t[y], n);
+        }
+    }
+
+    printf("\n---------------------------------------------\n");
+    printf("\nEsta √© a multiplica√ß√£o dessas duas matrizes:\n\n\n");
+
+    imprimir_matriz(mat1, i, j);
+
+    printf(".\n");
+
+    imprimir_matriz(mat2, i, j);
+
+    printf("=\n");
+
+    imprimir_matriz(mat3, i, j);
+
+    liberar_matriz(mat3, i);
+}
 
 int main (){
-setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_ALL, "Portuguese");
 
-printf("---------- MATRIZES ----------\n\n");
+    printf("---------- MATRIZES ----------\n\n");
 
-int i, j;
-int m, n;
-int o, p;
-int q, r;
-char adc[N]={"somar"};
-char subtr[N]={"subtrair"};
-char mult[N]={"multiplicar"};
-char digite[N];
-int somar;
-int subtrair;
-int multiplicar;
+    int op;
 
-printf("Insira o n˙mero de linhas 'i' e o n˙mero de colunas 'j' da matriz A:\n");
-printf("N˙mero de linhas i=");
-scanf("%d", &i);
-fflush(stdin);
+    printf("\nVamos criar a Matriz A.\n");
 
-printf("\nN˙mero de colunas j=");
-scanf("%d", &j);
-fflush(stdin);
+    struct Dim dim1 = obter_dimensoes();
+    int** mat1 = criar_matriz("Matriz A", dim1.i, dim1.j);
+    
+    printf("\n----------------------------------------------------\n");
 
+    printf("\nAgora, vamos criar a Matriz B.\n");
 
- int mat1[i][j];
+    struct Dim dim2 = obter_dimensoes();
+    int** mat2 = criar_matriz("Matriz B", dim2.i, dim2.j);
 
+    do {
+        printf("\n------------------------------------------------------------------\n");
+        printf("\nOpera√ß√µes:\n");
+        printf("1. Somar\n");
+        printf("2. Subtrair\n");
+        printf("3. Multiplicar\n");
+        printf("4. Sair\n");
 
- printf("\nAgora, preencha a matriz A.\n");
+        printf("Escolha uma opera√ß√£o: ");
+        scanf("%d", &op);
 
- for(m=0; m<i; m++){
-    for(n=0; n<j; n++){
-            printf("Digite o valor do elemento ij=%d%d: \n", m, n);
-            scanf("%d", &mat1[m][n]);
-            fflush(stdin);
-
-    }
- }
-
-  printf("Imprimindo a matriz A:\n");
-  printf("A = \n");
-    for(m=0; m<i; m++){
-        for(n=0; n<j; n++){
-            printf("%d ", mat1[m][n]);
+        switch (op) {
+            case 1:
+                if (dim1.i != dim2.i || dim1.j != dim2.j) {
+                    printf("\nO n√∫mero de linhas e colunas das matrizes n√£o s√£o iguais. Logo, √© imposs¬≠√≠vel efetuar a soma.\n");
+                } else {
+                    somar_matrizez(mat1, mat2, dim1.i, dim1.j);
+                }
+                break;
+            case 2:
+                if (dim1.i != dim2.i || dim1.j != dim2.j) {
+                    printf("\nO n√∫mero de linhas e colunas das matrizes n√£o s√£o iguais. Logo, √© imposs¬≠√≠vel efetuar a subtra√ß√£o.\n");
+                } else {
+                    subtrair_matrizez(mat1, mat2, dim1.i, dim1.j);
+                }
+                break;
+            case 3:
+                if (dim1.j != dim2.i) {
+                    printf("\nO n√∫mero de colunas da matriz A n√£o √© igual ao n√∫mero de linhas da matriz B. Logo, √© imposs¬≠√≠vel efetuar a multiplica√ß√£o.\n");
+                } else {
+                    multiplicar_matrizez(mat1, mat2, dim1.i, dim2.j, dim1.j);
+                }
+                break;
+            case 4:
+                printf("\nAt√© a pr√≥xima!\n\n");
+                break;
         }
-        printf("\n");
-    }
+    } while(op != 4);
 
-
-printf("\n----------------------------------------------------\n");
-
-printf("Agora, insira o n˙mero de linhas 'm' e o n˙mero de colunas 'n' da matriz B:\n");
-printf("N˙mero de linhas m=");
-scanf("%d", &o);
-fflush(stdin);
-
-printf("\nN˙mero de colunas n=");
-scanf("%d", &p);
-fflush(stdin);
-
-
- int mat2[o][p];
-
-
- printf("\nAgora, preencha a matriz B.\n");
-
- for(q=0; q<o; q++){
-    for(r=0; r<p; r++){
-            printf("Digite o valor do elemento ij=%d%d: \n", q, r);
-            scanf("%d", &mat2[q][r]);
-            fflush(stdin);
-
-    }
- }
-
-  printf("Imprimindo a matriz B:\n");
-  printf("B = \n");
-    for(q=0; q<o; q++){
-        for(r=0; r<p; r++){
-            printf("%d ", mat2[q][r]);
-        }
-        printf("\n");
-    }
-do{
-printf("\n------------------------------------------------------------------\n");
-printf("VocÍ quer somar, subtrair ou multiplicar?\n");
-scanf("%s", &digite);
-fflush(stdin);
-
-somar=strcmp(adc, digite);
-subtrair=strcmp(subtr, digite);
-multiplicar=strcmp(mult, digite);
-
-int e, f, x, y;
-int k=i;
-int l=j;
-int mat3[k][l];
-
-
-if(somar==0){
-    printf("\nEnt„o vocÍ quer somar.\n");
-
-
-for(x=0; x<i; x++){
-        for(y=0; y<j; y++){
-
-    mat3[x][y]=mat1[x][y]+mat2[x][y];
-
-        }
-    }
-    printf("\n---------------------------------------------\n");
-    printf("\nEsta È a soma dessas duas matrizes:\n\n\n");
-
-    printf("A + B = \n");
-    for(x=0; x<i; x++){
-        for(y=0; y<j; y++){
-            printf("%d ", mat3[x][y]);
-        }
-        printf("\n");
-    }
-
+    liberar_matriz(mat1, dim1.i);
+    liberar_matriz(mat2, dim2.i);
+    return 0;
 }
-if(subtrair==0){
-    printf("\nEnt„o vocÍ quer subtrair.\n");
-
-    for(x=0; x<i; x++){
-        for(y=0; y<j; y++){
-
-    mat3[x][y]=mat1[x][y]-mat2[x][y];
-
-        }
-    }
-    printf("\n---------------------------------------------\n");
-    printf("\nEsta È a subtraÁ„o dessas duas matrizes:\n\n\n");
-
-    printf("A - B = \n");
-    for(x=0; x<i; x++){
-        for(y=0; y<j; y++){
-            printf("%d ", mat3[x][y]);
-        }
-        printf("\n");
-    }
-
-}
-if(multiplicar==0){
-    if(j==o){
-    printf("\n---------------------------------------------\n");
-    printf("\nEsta È a multiplicaÁ„o dessas duas matrizes:\n\n\n");
-
-    int v, w, y, z, al;
-    int matmult[i][p];
-
-     for(v=0; v<i; v++){
-        for(w=0; w<j; w++){
-                for(al=0; al<j; al++){
-
-    matmult[v][w]+=mat1[v][al]*mat2[al][w];}
-
-        }
-    }
-
-     for(x=0; x<i; x++){
-        for(y=0; y<p; y++){
-            printf("%d ", matmult[x][y]);
-        }
-        printf("\n");
-    }
-
-    }else{
-    printf("O n˙mero de colunas da matriz A n„o È igual ao n˙mero de linhas da matriz B. Logo, È imposs≠Ìvel efetuar a multiplicaÁ„o.\n");
-}
-}
-}while(i>0 && j>0);
-
-
-
-return 0;}
