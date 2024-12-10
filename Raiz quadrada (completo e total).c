@@ -10,7 +10,7 @@ int main (){
 
 setlocale(LC_ALL, "Portuguese");
 
-    double A, inf, sup, D, media, media1, F, f1, x1, y1, f2, f3, tecla, fmedia, fmedia1, m=0;
+    double A, inf, sup, D, media, media1, F, f1, x1, y1, f2, f3, tecla, fmedia, fmedia1, m=0, epsilon = 1e-6;
 
     int B;
 
@@ -45,23 +45,24 @@ setlocale(LC_ALL, "Portuguese");
                     printf("A raiz é: %lf.", media);
                 }else{
 
-                while((x1<0 || y1<0) && m<50){
+                while((x1<0 || y1<0) && m == 0){
 
                     if(fmedia=0){
                     printf("O valor da raiz é:%lf.\n", media );
                     }else{
                          if(x1<0){
                     printf("A raiz está no intervalo: (%lf, %lf).\n", inf, media);
+                    if (fabs(inf - media) < epsilon) m = 1;
                     sup=media;
                     }
                          if(y1<0){
                     printf("A raiz está no intervalo: (%lf, %lf).\n", media, sup);
+                    if (fabs(media - sup) < epsilon) m = 1;
                     inf=media;
                          }
 
                     }
 
-            m++;
 
 
                 media=(inf+sup)/2;
@@ -74,9 +75,7 @@ setlocale(LC_ALL, "Portuguese");
 
                 system("cls");
 
-                if(m = 49){
-                    printf("O valor da raiz de é: %lf", media);
-                }
+                printf("O valor da raiz de é: %lf", media);
 
 
                 return 0;
