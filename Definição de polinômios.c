@@ -3,7 +3,6 @@
 #include <locale.h>
 #include <math.h>
 #include <string.h>
-#include <wchar.h>
 
 typedef struct Termo {
     int coeficiente;
